@@ -27,7 +27,14 @@ function onListBooksClick () {
 
 
 function getAndShowCategories (data) {
-    var categories = JSON.parse(data.responseText);
+    console.log(data);
+    var categories;
+    try {
+        categories = JSON.parse(data.responseText);
+    }
+    catch (err) {
+        categories = data.responseText;
+    }
     console.log(categories);
     var inputForm = document.createElement("form");
     inputForm.name = "chooseCategory";
@@ -42,15 +49,18 @@ function getAndShowCategories (data) {
         formInput.value = categories[i];
         
         var label = document.createElement("label");
-        var textNode = document.createTextNode(categories[i]);
+        var textNode = document.createTextNode(categories[i] + " ");
         label.appendChild(textNode);
         
         inputForm.appendChild(formInput);
         inputForm.appendChild(label);
     }
+    var submitButton = document.createElement("input");
+    submitButton.type = "submit";
+    submitButton.value = "List Books";
+    inputForm.appendChild(submitButton);
     console.log(data);
     $("categories").appendChild(inputForm);
-
 }
 
 
