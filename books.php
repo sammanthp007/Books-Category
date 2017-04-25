@@ -14,5 +14,7 @@
     <body>
     <div id="categories">
     </div>
+
+<button id="list_books"></button>
     </body>
 </html>
