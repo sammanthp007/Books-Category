@@ -23,9 +23,6 @@ function onListBooksClick () {
         }
     });
 
-    console.log("h<<<<<<<<<<i");
-
-
     if (chosenCategory) {
         new Ajax.Request ("booklist.php",
             {
@@ -48,7 +45,7 @@ function getAndShowCategories (data) {
     var category_list = [];
 
     if (data.responseJSON) {
-        categories = JSON.parse(data.responseText);
+        categories = JSON.parse(data.responseJSON);
     }
     else if (data.responseXML) {
         returnXML = data.responseXML;
@@ -110,7 +107,51 @@ function logFailure(ajax, exception) {
 
 
 function showBooks(data) {
-    console.log(data);
+    var book_list = [];
+    if (data.responseJSON) {
+        books = JSON.parse(data.responseJSON);
+    }
+    else if (data.responseXML) {
+        returnXML = data.responseXML;
+        var books = returnXML.getElementsByTagName("books")[0];
+        var currBook = books.firstChild;
+        while (currBook) {
+            var bookAuthor = currBook.firstChild.firstChild.nodeValue;
+            var bookCat = currBook.firstChild.nextSibling.firstChild.nodeValue;
+            var bookYear = currBook.firstChild.nextSibling.
+                nextSibling.firstChild.nodeValue;
+            var bookName = currBook.lastChild.firstChild.nodeValue;
+            book_list.push([bookAuthor, bookCat, bookYear, bookName]);
+            currBook = currBook.nextSibling;
+        }
+    } else {
+        console.log("This is not json nor xml:");
+        console.log(data.responseText);
+    }
+
+    if (book_list.length > 0) {
+        var title = document.createElement("p");
+        var text = document.createTextNode('Books in category ' + 
+            '"'+ book_list[0][1] + '":');
+        title.appendChild(text);
+        $("books").appendChild(title);
+    }
+
+    var ul = document.createElement("ul");
+
+    for (var i=0; i < book_list.length; i++) {
+        var li = document.createElement("li");
+        var bookItem = book_list[i][3] + 
+            ", by " + book_list[i][0] + 
+            " (" + book_list[i][2] + ")";
+
+        console.log(bookItem);
+        var row = document.createTextNode(bookItem);
+        li.appendChild(row);
+        ul.appendChild(li);
+    }
+
+    $("books").appendChild(ul);
 }
 
 

@@ -14,5 +14,8 @@
     <body>
     <div id="categories">
     </div>
+
+    <div id="books">
+    </div>
     </body>
 </html>

@@ -69,10 +69,11 @@ if ($showCategory == 1) {
     } else {
         $booksXML = new SimpleXMLElement("<?xml version='1.0'?><books></books>");
         while ($row = $all_books->fetch_assoc()) {
-            $currBook = $booksXML->addChild($row[title_name]);
+            $currBook = $booksXML->addChild("book");
             $currBook->addChild("author", $row[author]);
             $currBook->addChild("name", $row[category]);
             $currBook->addChild("year", $row[year]);
+            $currBook->addChild("title", $row[title_name]);
         }
 
         Header('Content-type: text/xml');
