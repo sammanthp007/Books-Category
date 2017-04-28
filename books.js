@@ -14,6 +14,10 @@ function pageLoad() {
 }
 
 function onListBooksClick () {
+    /* rmeove previous search */
+    while ($("books").hasChildNodes()) {
+        $("books").removeChild($("books").lastChild);
+    }
     var radioButtons = document.getElementsByName('category');
     var chosenCategory;
 
