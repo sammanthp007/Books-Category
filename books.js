@@ -27,34 +27,39 @@ function onListBooksClick () {
 
 
 function getAndShowCategories (data) {
+    var category_list = [];
     console.log(data);
     var categories;
-    try {
+    if (data.responseJSON) {
         categories = JSON.parse(data.responseText);
     }
-    catch (err) {
+    else if (data.responseXML) {
         categories = data.responseXML;
+        var category = data.responseXML.getElementsByTagName("categories");
+        console.log(category[0]);
+        var category_name = category[0].firstChild.firstChild;
+        console.log(category_name);
+    } else {
+        console.log(data.responseText);
     }
-    var category = data.responseXML.getElementsByTagName("categories");
-    console.log(category[0]);
-    var category_name = category[0].firstChild.firstChild;
-    console.log(category_name);
+
+    /* create a radio button and add data */
     var inputForm = document.createElement("form");
     inputForm.name = "chooseCategory";
     inputForm.method = "POST";
     inputForm.action = "booklist.php";
 
-    for (var i = 0; i < categories.length; i++) {
+    for (var i = 0; i < category_list.length; i++) {
         console.log(categories[i]);
         var formInput = document.createElement("input");
         formInput.type = "radio";
         formInput.name = "category";
         formInput.value = categories[i];
-        
+
         var label = document.createElement("label");
         var textNode = document.createTextNode(categories[i] + " ");
         label.appendChild(textNode);
-        
+
         inputForm.appendChild(formInput);
         inputForm.appendChild(label);
     }
@@ -68,6 +73,7 @@ function getAndShowCategories (data) {
 
 
 function logFailure(ajax, exception) {
+    console.log(ajax);
     console.log("Could not fetch data from the database.\n"
         + "Return Status: " + ajax.status + "\n"
         + "Status Text: " + ajax.statusText
