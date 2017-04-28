@@ -28,7 +28,6 @@ function onListBooksClick () {
 
 function getAndShowCategories (data) {
     var category_list = [];
-    console.log(data);
     var categories;
     if (data.responseJSON) {
         categories = JSON.parse(data.responseText);
@@ -36,9 +35,7 @@ function getAndShowCategories (data) {
     else if (data.responseXML) {
         categories = data.responseXML;
         var category = data.responseXML.getElementsByTagName("categories");
-        console.log(category[0]);
-        var category_name = category[0].firstChild.firstChild;
-        console.log(category_name);
+        console.log(data);
     } else {
         console.log(data.responseText);
     }
