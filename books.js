@@ -6,7 +6,7 @@ function pageLoad() {
     var p = new Ajax.Request ("booklist.php",
         {
             method: "get",
-            parameters: {showCategory: true},
+            parameters: {showCategory: 1},
             onSuccess: getAndShowCategories,
             onFailure: logFailure,
             onException: logFailure
@@ -23,12 +23,16 @@ function onListBooksClick () {
         }
     });
 
+    console.log("h<<<<<<<<<<i");
+
 
     if (chosenCategory) {
-        var p = new Ajax.Request ("booklist.php",
+        new Ajax.Request ("booklist.php",
             {
                 method: "get",
-                parameters: {showCategory: false, category: chosenCategory},
+                parameters: {
+                    showCategory: 0, 
+                    category: chosenCategory},
                 onSuccess: showBooks,
                 onFailure: logFailure,
                 onException: logFailure
@@ -103,5 +107,11 @@ function logFailure(ajax, exception) {
         throw exception;
     }
 }
+
+
+function showBooks(data) {
+    console.log(data);
+}
+
 
 window.onload = pageLoad;

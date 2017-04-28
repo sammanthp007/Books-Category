@@ -16,12 +16,12 @@ function db_connect() {
     return $connection;
 }
 
-$db = db_connect();
 
 $format = $_GET["format"];
 $showCategory = $_GET["showCategory"];
 
-if ($showCategory) {
+if ($showCategory == 1) {
+    $db = db_connect();
     $sql = "select * from category;";
     $all_categories = mysqli_query($db, $sql);
 
@@ -44,5 +44,8 @@ if ($showCategory) {
         Header('Content-type: text/xml');
         echo $xml->asXML();
     }
+    mysqli_close($db);
+} else if ($showCategory == 0) {
+    echo "Samman says hi";
 }
 ?>
