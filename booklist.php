@@ -35,11 +35,9 @@ if ($showCategory) {
         echo json_encode($returnJSON);
     } else {
         $xml = new SimpleXMLElement("<?xml version='1.0'?><categories></categories>");
-        $xml->addAttribute('newsPagePrefix', 'value goes here');
-        $bookCategory = $xml->addChild("categories");
         while ($row = $all_categories->fetch_assoc()) {
-            $currCategory = $bookCategory->addChild($row[category]);
-            $currCategory->addChild("name", "b");
+            $currCategory = $xml->addChild($row[category]);
+            $currCategory->addChild("name", $row[category]);
             $currCategory->addChild("id", $row[category_id]);
         }
 

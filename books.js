@@ -28,18 +28,26 @@ function onListBooksClick () {
 
 function getAndShowCategories (data) {
     var category_list = [];
+
     if (data.responseJSON) {
         categories = JSON.parse(data.responseText);
     }
     else if (data.responseXML) {
         returnXML = data.responseXML;
-        var category = returnXML.getElementsByTagName("categories");
-        console.log(category[0].firstChild);
+        var categories = returnXML.getElementsByTagName("categories")[0];
+        var firstchild = categories.firstChild;
+        while (firstchild) {
+            var catName = firstchild.firstChild.firstChild.nodeValue;
+            var catID = firstchild.lastChild.firstChild.nodeValue;
+            category_list.push([catName, catID]);
+            firstchild = firstchild.nextSibling;
+        }
     } else {
         console.log("This is not json nor xml:");
         console.log(data.responseText);
     }
 
+            console.log(category_list);
     /* create a radio button and add data */
     var inputForm = document.createElement("form");
     inputForm.name = "chooseCategory";
@@ -47,14 +55,14 @@ function getAndShowCategories (data) {
     inputForm.action = "booklist.php";
 
     for (var i = 0; i < category_list.length; i++) {
-        console.log(categories[i]);
+        console.log(category_list[i]);
         var formInput = document.createElement("input");
         formInput.type = "radio";
         formInput.name = "category";
-        formInput.value = categories[i];
+        formInput.value = category_list[i][1];
 
         var label = document.createElement("label");
-        var textNode = document.createTextNode(categories[i] + " ");
+        var textNode = document.createTextNode(category_list[i][0] + " ");
         label.appendChild(textNode);
 
         inputForm.appendChild(formInput);
