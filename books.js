@@ -31,7 +31,7 @@ function onListBooksClick () {
             {
                 method: "get",
                 parameters: {
-                    showCategory: 0, 
+                    showCategory: 0,
                     category: chosenCategory},
                 onSuccess: showBooks,
                 onFailure: logFailure,

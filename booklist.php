@@ -46,6 +46,38 @@ if ($showCategory == 1) {
     }
     mysqli_close($db);
 } else if ($showCategory == 0) {
-    echo "Samman says hi";
+    $chosenCategory = $_GET["category"];
+    
+    $db = db_connect();
+    
+
+    $sql = "select t.title_name, a.author, y.year, c.category from title t ";
+    $sql .= "join category c on c.category_id = t.category_id and ";
+    $sql .= "c.category_id=" . $chosenCategory . " ";
+    $sql .= "join year y on y.title_id = t.title_id ";
+    $sql .= "join author a on a.author_id = t.author_id;";
+    $all_books = mysqli_query($db, $sql);
+    
+    if ($format == "json") {
+        $list_of_books = array();
+
+        while ($row = $all_books->fetch_assoc()) {
+            array_push($list_of_books, $row[category]);
+        }
+        $returnJSON = array("books" => $list_of_books);
+        echo json_encode($returnJSON);
+    } else {
+        $booksXML = new SimpleXMLElement("<?xml version='1.0'?><books></books>");
+        while ($row = $all_books->fetch_assoc()) {
+            $currBook = $booksXML->addChild($row[title_name]);
+            $currBook->addChild("author", $row[author]);
+            $currBook->addChild("name", $row[category]);
+            $currBook->addChild("year", $row[year]);
+        }
+
+        Header('Content-type: text/xml');
+        echo $booksXML->asXML();
+    }
+    mysqli_close($db);
 }
 ?>
