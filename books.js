@@ -33,7 +33,7 @@ function getAndShowCategories (data) {
         categories = JSON.parse(data.responseText);
     }
     catch (err) {
-        categories = data.responseText;
+        categories = data.responseXML;
     }
     console.log(categories);
     var inputForm = document.createElement("form");
