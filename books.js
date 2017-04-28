@@ -6,6 +6,7 @@ function pageLoad() {
     var p = new Ajax.Request ("booklist.php",
         {
             method: "get",
+            parameters: {showCategory: true},
             onSuccess: getAndShowCategories,
             onFailure: logFailure,
             onException: logFailure
@@ -17,7 +18,7 @@ function onListBooksClick () {
     var p = new Ajax.Request ("booklist.php",
         {
             method: "get",
-            parameters: {category: this.name},
+            parameters: {showCategory: false, category: this.name},
             onSuccess: showBooks,
             onFailure: logFailure,
             onException: logFailure
@@ -34,7 +35,10 @@ function getAndShowCategories (data) {
     catch (err) {
         categories = data.responseXML;
     }
-    var books = data.responseXML.getElementsByTagName("book");
+    var category = data.responseXML.getElementsByTagName("categories");
+    console.log(category[0]);
+    var category_name = category[0].firstChild.firstChild;
+    console.log(category_name);
     var inputForm = document.createElement("form");
     inputForm.name = "chooseCategory";
     inputForm.method = "POST";
