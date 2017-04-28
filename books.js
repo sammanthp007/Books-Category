@@ -1,6 +1,6 @@
 function pageLoad() {
-    /* add even handlers */
-    //$("list_books").onclick = onListBooksClick;
+    /* add even handler */
+    // $("list_books").onclick = onListBooksClick;
 
     /* make ajax calls */
     var p = new Ajax.Request ("booklist.php",
@@ -14,15 +14,29 @@ function pageLoad() {
 }
 
 function onListBooksClick () {
-    console.log(this.name);
-    var p = new Ajax.Request ("booklist.php",
-        {
-            method: "get",
-            parameters: {showCategory: false, category: this.name},
-            onSuccess: showBooks,
-            onFailure: logFailure,
-            onException: logFailure
-        });
+    var radioButtons = document.getElementsByName('category');
+    var chosenCategory;
+
+    radioButtons.forEach(function(button) {
+        if (button.checked) {
+            chosenCategory = button.value;
+        }
+    });
+
+
+    if (chosenCategory) {
+        var p = new Ajax.Request ("booklist.php",
+            {
+                method: "get",
+                parameters: {showCategory: false, category: chosenCategory},
+                onSuccess: showBooks,
+                onFailure: logFailure,
+                onException: logFailure
+            });
+    }
+    else {
+        console.log("choose a category");
+    }
 }
 
 
@@ -47,15 +61,11 @@ function getAndShowCategories (data) {
         console.log(data.responseText);
     }
 
-            console.log(category_list);
     /* create a radio button and add data */
     var inputForm = document.createElement("form");
     inputForm.name = "chooseCategory";
-    inputForm.method = "POST";
-    inputForm.action = "booklist.php";
 
     for (var i = 0; i < category_list.length; i++) {
-        console.log(category_list[i]);
         var formInput = document.createElement("input");
         formInput.type = "radio";
         formInput.name = "category";
@@ -69,10 +79,14 @@ function getAndShowCategories (data) {
         inputForm.appendChild(label);
     }
     var submitButton = document.createElement("input");
-    submitButton.type = "submit";
+    submitButton.type = "button";
+    // submitButton.addEventListener('click', function(){
+    //  onListBooksClick(inputForm)
+    //});
     submitButton.value = "List Books";
+    submitButton.onclick = onListBooksClick;
     inputForm.appendChild(submitButton);
-    console.log(data);
+
     $("categories").appendChild(inputForm);
 }
 
