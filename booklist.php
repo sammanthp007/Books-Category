@@ -18,24 +18,32 @@ function db_connect() {
 
 $db = db_connect();
 
-$list_of_categories = array(array("Productivity",6),array("Computers", 1), array("Finance", 2));
-
 $format = $_GET["format"];
+$showCategory = $_GET["showCategory"];
 
-if ($format == "json") {
-    echo json_encode($list_of_categories);
-} else {
+if ($showCategory) {
     $sql = "select * from category;";
     $all_categories = mysqli_query($db, $sql);
-    $xml = new SimpleXMLElement("<?xml version='1.0'?><categories></categories>");
-    $xml->addAttribute('newsPagePrefix', 'value goes here');
-    while ($row = $all_categories->fetch_assoc()) {
-        $bookCategory = $xml->addChild("categories");
-        $bookCategory->addChild($row[category]);
 
-        Header('Content-type: text/xml');
+    if ($format == "json") {
+        $list_of_categories = array();
+
+        while ($row = $all_categories->fetch_assoc()) {
+            array_push($list_of_categories, $row[category]);
+        }
+        $returnJSON = array("categories" => $list_of_categories);
+        echo json_encode($returnJSON);
+    } else {
+        $xml = new SimpleXMLElement("<?xml version='1.0'?><categories></categories>");
+        $xml->addAttribute('newsPagePrefix', 'value goes here');
+        while ($row = $all_categories->fetch_assoc()) {
+            $bookCategory = $xml->addChild("categories");
+            $bookCategory->addChild($row[category]);
+
+            Header('Content-type: text/xml');
+        }
+
+        echo $xml->asXML();
     }
-
-    echo $xml->asXML();
 }
 ?>
