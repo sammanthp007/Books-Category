@@ -22,7 +22,6 @@ function onListBooksClick () {
             onFailure: logFailure,
             onException: logFailure
         });
-    alert("hoh");
 }
 
 
@@ -35,7 +34,7 @@ function getAndShowCategories (data) {
     catch (err) {
         categories = data.responseXML;
     }
-    console.log(categories);
+    var books = data.responseXML.getElementsByTagName("book");
     var inputForm = document.createElement("form");
     inputForm.name = "chooseCategory";
     inputForm.method = "POST";

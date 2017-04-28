@@ -1,5 +1,23 @@
 <?php
-$db = new PDO("mysql:dbname=books;host=127.0.0.1", "root", "password");
+
+define("DB_SERVER", "localhost");
+define("DB_USER", "root");
+define("DB_PASS", "password");
+define("DB_NAME", "nwp7books");
+
+function db_connect() {
+    $connection = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
+    if(mysqli_connect_errno()) {
+        $msg = "Database connection failed: ";
+        $msg .= mysqli_connect_error();
+        $msg .= " (" . mysqli_connect_errno() . ")";
+        exit($msg);
+    }
+    return $connection;
+}
+
+$db = db_connect();
+
 $list_of_categories = array("Children", "Computers", "Finance");
 
 $format = $_GET["format"];
