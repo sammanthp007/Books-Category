@@ -36,13 +36,14 @@ if ($showCategory) {
     } else {
         $xml = new SimpleXMLElement("<?xml version='1.0'?><categories></categories>");
         $xml->addAttribute('newsPagePrefix', 'value goes here');
+        $bookCategory = $xml->addChild("categories");
         while ($row = $all_categories->fetch_assoc()) {
-            $bookCategory = $xml->addChild("categories");
-            $bookCategory->addChild($row[category]);
-
-            Header('Content-type: text/xml');
+            $currCategory = $bookCategory->addChild($row[category]);
+            $currCategory->addChild("name", "b");
+            $currCategory->addChild("id", $row[category_id]);
         }
 
+        Header('Content-type: text/xml');
         echo $xml->asXML();
     }
 }

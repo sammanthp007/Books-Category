@@ -28,15 +28,15 @@ function onListBooksClick () {
 
 function getAndShowCategories (data) {
     var category_list = [];
-    var categories;
     if (data.responseJSON) {
         categories = JSON.parse(data.responseText);
     }
     else if (data.responseXML) {
-        categories = data.responseXML;
-        var category = data.responseXML.getElementsByTagName("categories");
-        console.log(data);
+        returnXML = data.responseXML;
+        var category = returnXML.getElementsByTagName("categories");
+        console.log(category[0].firstChild);
     } else {
+        console.log("This is not json nor xml:");
         console.log(data.responseText);
     }
 
